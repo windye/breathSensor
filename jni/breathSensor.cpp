@@ -272,20 +272,20 @@ BreathSensor * BreathSensor::getInstance(JNIEnv *env, jobject breathSensor,
 		int err = 0;
 		pthread_t ntid;
 		pthread_attr_t  attr;
-		if( pthread_attr_init(&attr) != 0 ) // 因为还没有初始化成功，不需要销毁attr 直接返回
-		{
-			MY_LOG_ERROR("pthread_attr_init failed");
-			err = -1;
-			return -1;
-		}
-		if(pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED) != 0 )
-		{
-			MY_LOG_ERROR("pthread_attr_setdetachstate failed");
-			err = -1;
-			goto exit;
-		}
 		if( ThreadExist_Flag == false ) //线程不存在，则创建线程
 		{
+			if( pthread_attr_init(&attr) != 0 ) // 因为还没有初始化成功，不需要销毁attr 直接返回
+			{
+				MY_LOG_ERROR("pthread_attr_init failed");
+				err = -1;
+				goto res;   // not need to destroy attr
+			}
+			if(pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED) != 0 )
+			{
+				MY_LOG_ERROR("pthread_attr_setdetachstate failed");
+				err = -1;
+				goto exit;
+			}
 			ThreadExist_Flag = true;
 			ThreadStop_Flag = false;
 			tcflush(m_fd, TCIFLUSH); // 清空linux内核残留的数据
@@ -317,9 +317,11 @@ BreathSensor * BreathSensor::getInstance(JNIEnv *env, jobject breathSensor,
 						MY_LOG_INFO("Test is doing, please stop first ! \n");
 
 				}
+				goto res;
 		}
 	exit:
 		pthread_attr_destroy(&attr);
+   res:
 		return err;
 	}
 

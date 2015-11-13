@@ -20,7 +20,7 @@ public class BreathSensor
 	    private ByteBuffer m_buf;
 	    private int  m_bufSize;
 	    private int m_readPointer;
-	    String  m_deviceName;  // ttyUSB0
+	    String  m_deviceName;  //      "/dev/ttyUSB0"
 	    
 	    public native void  device_native_init(String deviceName, ByteBuffer recv_buf);
 	    public  native void start_button_native_handler(int sample_mode);
@@ -70,7 +70,7 @@ public class BreathSensor
 					    			
 					    	}
 					    	else
-					    		Thread.sleep(100);
+					    		Thread.sleep(50);
 				    	
 			    }
 	    }

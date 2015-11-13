@@ -1,0 +1,7 @@
+*.[oa]
+*.so
+*.dex
+*.apk
+*.o.d
+*.class
+*~
