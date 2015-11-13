@@ -5,3 +5,8 @@
 *.o.d
 *.class
 *~
+.project
+.classpath
+*.ap_
+*.jar
+Android.mk
